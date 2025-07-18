@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, keepPreviousData } from "@tanstack/react-query";
+import { useEffect } from "react";
 import ReactPaginate from "react-paginate";
 import type { Movie } from "../../types/movie";
 import { fetchMovies } from "../../services/movieService";
@@ -20,6 +21,7 @@ export default function App() {
     queryKey: ["movies", query, currentPage],
     queryFn: () => fetchMovies(query, currentPage),
     enabled: query !== "",
+    placeholderData: keepPreviousData,
   });
 
   const isLoading = queryResult.isLoading;
@@ -40,9 +42,11 @@ export default function App() {
     setCurrentPage(selected + 1);
   };
 
-  if (isSuccess && movies.length === 0 && query) {
-    toast("No movies found for your request.");
-  }
+  useEffect(() => {
+    if (isSuccess && movies.length === 0 && query) {
+      toast("No movies found for your request.");
+    }
+  }, [isSuccess, movies.length, query]);
 
   return (
     <div className={css.app}>
