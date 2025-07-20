@@ -29,7 +29,7 @@ export default function App() {
   const isSuccess = queryResult.isSuccess;
 
   const movies = queryResult.data ? queryResult.data.results : [];
-  const totalPages = queryResult.data ? queryResult.data.totalPages : 0;
+  const totalPages = queryResult.data ? queryResult.data.total_pages : 0;
 
   const handleSearch = (newQuery: string) => {
     if (!newQuery.trim()) return;
